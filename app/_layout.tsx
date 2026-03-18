@@ -5,17 +5,16 @@ import 'react-native-reanimated';
 
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+	anchor: '(tabs)',
 };
 
 export default function RootLayout() {
-
-  return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+	return (
+		<ThemeProvider value={DefaultTheme}>
+			<Stack>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+			</Stack>
+			<StatusBar style="auto" />
+		</ThemeProvider>
+	);
 }
