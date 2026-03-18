@@ -1,1 +1,3 @@
+Zadania zostały umieszczone w komponencie Tabs z biblioteki Expo w celu ułatwienia nawigacji między nimi. 
+
 zadanie 1: 
