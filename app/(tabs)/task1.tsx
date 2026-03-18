@@ -1,6 +1,6 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import EventCard from '@/resources/EventCard';
 import { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 let eventCategories: string[] = ['Inne', 'Nauka', 'Muzyka', 'Film', 'Sport'];
 
@@ -51,25 +51,7 @@ const style = StyleSheet.create({
 	},
 });
 
-function renderEvent(event: Event, eventList: Event[], setEventList: React.Dispatch<React.SetStateAction<Event[]>>) {
-	return (
-		<View style={eventList[eventList.indexOf(event)].favorite ? style.listHighlighted : style.listNormal}>
-			<Pressable
-				onPress={() => {
-					const updatedEvents = [...eventList];
-					updatedEvents[eventList.indexOf(event)].favorite = !updatedEvents[eventList.indexOf(event)].favorite;
-					setEventList(updatedEvents);
-				}}
-				style={{ position: 'absolute', top: 8, right: 8, padding: 8, borderRadius: 4 }}>
-				<FontAwesome name={eventList[eventList.indexOf(event)].favorite ? "star" : "star-o"} size={24} color="black" />
-			</Pressable>
-			<Text style={style.listItemTitle}>{event.title}</Text>
-			<Text>Data: {event.date.toLocaleDateString('pl-PL')}</Text>
-			<Text>Miejsce: {event.location}</Text>
-			<Text>Kategoria: {event.category}</Text>
-		</View>
-	);
-}
+
 
 export default function Task1Screen() {
 	const [savedEvents, setSavedEvents] = useState<Event[]>([
@@ -86,7 +68,7 @@ export default function Task1Screen() {
 			<FlatList
 				style={style.listView}
 				data={savedEvents}
-				renderItem={({ item }) => renderEvent(item, savedEvents, setSavedEvents)}
+				renderItem={({ item }) => <EventCard id={item.id} title={item.title} date={item.date} location={item.location} category={item.category} favorite={item.favorite} eventList={savedEvents} eventListUpdateCallback={setSavedEvents} />}
 				keyExtractor={(item) => item.id.toString()}
 			/>
 		</View>
