@@ -1,3 +1,4 @@
-Zadania zostały umieszczone w komponencie Tabs z biblioteki Expo w celu ułatwienia nawigacji między nimi. 
+Zadania zostały umieszczone w komponencie Tabs z biblioteki Expo w celu ułatwienia tworzenia aplikacji - potrzebna tylko jedna aplikacja. 
 
 zadanie 1: 
+Do kodu zostanie dodane wyszukiwanie tylko ulubionych wydarzeń. Wyszukiwanie to zostało zaimplementowane jako część filtrowania po kategoriach. 

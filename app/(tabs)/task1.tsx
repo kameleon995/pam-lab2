@@ -1,6 +1,6 @@
 import EventCard from '@/resources/EventCard';
 import { useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
 let eventCategories: string[] = ['Inne', 'Nauka', 'Muzyka', 'Film', 'Sport'];
 
@@ -21,12 +21,14 @@ const style = StyleSheet.create({
 		marginBottom: 8,
 	},
 	unselectedCategory: {
-		margin: 8,
+		fontSize: 14,
+		marginHorizontal: 8,
 		padding: 8,
 		fontWeight: 'normal',
 	},
 	selectedCategory: {
-		margin: 8,
+		fontSize: 14,
+		marginHorizontal: 8,
 		padding: 8,
 		fontWeight: 'bold',
 		backgroundColor: '#ddd',
@@ -54,7 +56,16 @@ const style = StyleSheet.create({
 	},
 });
 
-
+function filterEvents(events: Event[], category: string, nameFilter: string): Event[] {
+	return events.filter(event => {
+		if (category === 'Ulubione') {
+			return event.favorite === true;
+		} else if (category === 'Wszystkie' || category === '') {
+			return true;
+		}
+		return event.category === category;
+	}).filter(event => event.title.toLowerCase().includes(nameFilter.toLowerCase()));
+}
 
 export default function Task1Screen() {
 	const [savedEvents, setSavedEvents] = useState<Event[]>([
@@ -65,27 +76,28 @@ export default function Task1Screen() {
 		new Event(3, 'Mecz siatkówki', new Date('2026-04-16'), eventCategories[4], 'Poznań', true),
 	]);
 	const [selectedCategory, setSelectedCategory] = useState<string>('Wszystkie');
+	const [nameFilter, setNameFilter] = useState<string>('');
 
 	return (
 		<View style={style.main}>
 			<Text style={style.title}>Wydarzenia:</Text>
-			<Text style={style.text}>W obecnie wybranej kategorii: {savedEvents.filter(event => selectedCategory === 'Wszystkie' || selectedCategory === '' ? true : event.category === selectedCategory).length}</Text>
+			<Text style={style.text}>W obecnie wybranej kategorii: {filterEvents(savedEvents, selectedCategory, nameFilter).length}</Text>
 			<Text style={style.text}>Filtruj wg kategorii:</Text>
-			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-				<View style={{ flexDirection: 'row', gap: 8 }}>
-					{['Wszystkie', ...eventCategories].map(category => (
-						<Text key={category} style={category === selectedCategory ? style.selectedCategory : style.unselectedCategory} onPress={() => setSelectedCategory(category)}>{category}</Text>
-					))}
-				</View>
-			</ScrollView>
+			<FlatList
+				style={{ gap: 8, height: '8%' }}
+				data={[ 'Wszystkie', 'Ulubione', ...eventCategories ]}
+				renderItem={({ item }) => <Text style={item === selectedCategory ? style.selectedCategory : style.unselectedCategory} onPress={() => setSelectedCategory(item)}>{item}</Text>}
+				keyExtractor={(item) => item}
+				horizontal={true}
+				showsHorizontalScrollIndicator={false}
+			/>
 			<TextInput
 				style={style.searchBox}
-				value={selectedCategory}
-				onChangeText={setSelectedCategory}
-			/>
+				value={nameFilter}
+				onChangeText={setNameFilter} />
 			<FlatList
 				style={style.listView}
-				data={savedEvents.filter(event => selectedCategory === 'Wszystkie' || selectedCategory === '' ? true : event.category === selectedCategory)}
+				data={filterEvents(savedEvents, selectedCategory, nameFilter)}
 				renderItem={({ item }) => <EventCard id={item.idNumber} title={item.title} date={item.date} location={item.location} category={item.category} favorite={item.favorite} eventList={savedEvents} eventListUpdateCallback={setSavedEvents} />}
 				keyExtractor={(item) => item.idNumber.toString()}
 			/>
