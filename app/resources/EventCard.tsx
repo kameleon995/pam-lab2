@@ -31,7 +31,8 @@ const EventCard = ({ id, title, date, location, category, favorite, eventList, e
 			<Pressable
 				onPress={() => {
 					const updatedEvents = [...eventList];
-					updatedEvents[id].favorite = !updatedEvents[id].favorite;
+					const index = updatedEvents.findIndex(event => event.idNumber === id);
+					updatedEvents[index].favorite = !updatedEvents[index].favorite;
 					eventListUpdateCallback(updatedEvents);
 				}}
 				style={{ position: 'absolute', top: 8, right: 8, padding: 8, borderRadius: 4 }}>

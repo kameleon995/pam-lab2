@@ -11,7 +11,7 @@ export const unstable_settings = {
 export default function RootLayout() {
 	return (
 		<ThemeProvider value={DefaultTheme}>
-			<Stack>
+			<Stack screenOptions={{ headerBackTitle: 'Do zadań', headerTitle: 'Lab 2' }}>
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 			</Stack>
 			<StatusBar style="auto" />

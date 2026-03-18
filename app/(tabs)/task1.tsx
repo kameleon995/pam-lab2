@@ -1,12 +1,12 @@
 import EventCard from '@/resources/EventCard';
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 let eventCategories: string[] = ['Inne', 'Nauka', 'Muzyka', 'Film', 'Sport'];
 
 class Event {
-	constructor(public id: number, public title: string = '', public date: Date = new Date(), public category: string = eventCategories[0], public location: string = '', public favorite: boolean = false) {
-		return { id: id, title: title, date: date, category: category, location: location, favorite: favorite }
+	constructor(public idNumber: number, public title: string = '', public date: Date = new Date(), public category: string = eventCategories[0], public location: string = '', public favorite: boolean = false) {
+		return { idNumber: idNumber, title: title, date: date, category: category, location: location, favorite: favorite }
 	}
 }
 
@@ -17,37 +17,40 @@ const style = StyleSheet.create({
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
 	},
+	text: {
+		marginBottom: 8,
+	},
+	unselectedCategory: {
+		margin: 8,
+		padding: 8,
+		fontWeight: 'normal',
+	},
+	selectedCategory: {
+		margin: 8,
+		padding: 8,
+		fontWeight: 'bold',
+		backgroundColor: '#ddd',
+	},
 	title: {
 		fontSize: 28,
 		fontWeight: 'bold',
 		marginBottom: 16,
 	},
-	listNormal: {
-		width: '100%',
-		padding: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
-		backgroundColor: '#fafafa',
-	},
-	listHighlighted: {
-		width: '100%',
-		padding: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
-		backgroundColor: '#fff6b9',
-	},
 	listView: {
 		width: '100%',
+		height: '100%',
+		marginTop: 8,
 		borderWidth: 1,
 		borderColor: '#ccc',
 		borderRadius: 8,
 	},
-	listItemTitle: {
-		fontSize: 18,
-		fontWeight: 'bold',
-		paddingBottom: 4,
-		marginRight: 48,
-		flexWrap: 'wrap',
+	searchBox: {
+		width: '100%',
+		padding: 12,
+		borderWidth: 1,
+		borderColor: '#ccc',
+		borderRadius: 8,
+		marginVertical: 16,
 	},
 });
 
@@ -61,15 +64,30 @@ export default function Task1Screen() {
 		new Event(4, 'Warsztaty programowania', new Date('2026-07-15'), eventCategories[1], 'Wrocław', false),
 		new Event(3, 'Mecz siatkówki', new Date('2026-04-16'), eventCategories[4], 'Poznań', true),
 	]);
+	const [selectedCategory, setSelectedCategory] = useState<string>('Wszystkie');
 
 	return (
 		<View style={style.main}>
 			<Text style={style.title}>Wydarzenia:</Text>
+			<Text style={style.text}>W obecnie wybranej kategorii: {savedEvents.filter(event => selectedCategory === 'Wszystkie' || selectedCategory === '' ? true : event.category === selectedCategory).length}</Text>
+			<Text style={style.text}>Filtruj wg kategorii:</Text>
+			<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+				<View style={{ flexDirection: 'row', gap: 8 }}>
+					{['Wszystkie', ...eventCategories].map(category => (
+						<Text key={category} style={category === selectedCategory ? style.selectedCategory : style.unselectedCategory} onPress={() => setSelectedCategory(category)}>{category}</Text>
+					))}
+				</View>
+			</ScrollView>
+			<TextInput
+				style={style.searchBox}
+				value={selectedCategory}
+				onChangeText={setSelectedCategory}
+			/>
 			<FlatList
 				style={style.listView}
-				data={savedEvents}
-				renderItem={({ item }) => <EventCard id={item.id} title={item.title} date={item.date} location={item.location} category={item.category} favorite={item.favorite} eventList={savedEvents} eventListUpdateCallback={setSavedEvents} />}
-				keyExtractor={(item) => item.id.toString()}
+				data={savedEvents.filter(event => selectedCategory === 'Wszystkie' || selectedCategory === '' ? true : event.category === selectedCategory)}
+				renderItem={({ item }) => <EventCard id={item.idNumber} title={item.title} date={item.date} location={item.location} category={item.category} favorite={item.favorite} eventList={savedEvents} eventListUpdateCallback={setSavedEvents} />}
+				keyExtractor={(item) => item.idNumber.toString()}
 			/>
 		</View>
 	);
