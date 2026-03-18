@@ -1,9 +1,9 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { View } from 'react-native';
 
 import { Colors } from '@/constants/theme';
-import { View } from 'react-native';
 
 export default function TabLayout() {
 	return (
@@ -20,6 +20,18 @@ export default function TabLayout() {
 						<View style={{ flexDirection: 'row', gap: 4 }}>
 							<FontAwesome6 name="0" size={size} color={color} />
 							<FontAwesome6 name="1" size={size} color={color} />
+						</View>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="task2"
+				options={{
+					title: 'Ekran zadania 2',
+					tabBarIcon: ({ color, size }) => (
+						<View style={{ flexDirection: 'row', gap: 4 }}>
+							<FontAwesome6 name="0" size={size} color={color} />
+							<FontAwesome6 name="2" size={size} color={color} />
 						</View>
 					),
 				}}
